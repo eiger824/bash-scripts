@@ -6,6 +6,8 @@ alias gl='git log'
 alias gs='git status'
 alias gd='git diff'
 alias gb='git branch'
+alias gc='git checkout'
+
 alias qq='exit'
 
 if [ -x /usr/bin/dircolors ]; then
@@ -47,3 +49,5 @@ alias count='wc -l'
 alias sl='sl -e'
 
 alias ec='echo Return code was: $?'
+
+complete -W "\`\grep -oE '^[a-zA-Z0-9_-]+:([^=]|$)' *file | sed 's/[^a-zA-Z0-9_-]*$//'\`" make
