@@ -3,13 +3,26 @@
 usage()
 {
     cat << EOF
-Usage: $(basename $0) b|p|h|s
+Usage: $(basename $0) b|h|l|p|s
 ARGS:
     -b       Show a "bouncing"-like bar.
     -h       Print this help and exit.
+    -l <len> Sets the length of the bar (either progress or bouncing.)
+             Defaults to 100 columns.
     -p       Show a progress bar.
     -s <sep> Specify the character to fill the spaces with.
+    -w       When using in the bouncing bar, sets the width of the slider.
+             This option has no effect when using a progress bar.
+             Defaults to 30.
 EOF
+}
+
+handle_sigint()
+{
+    # Make sure echo is activated back on the terminal
+    stty echo
+    echo
+    exit 2
 }
 
 bouncing_bar()
@@ -17,7 +30,13 @@ bouncing_bar()
     ##### Input parameters #####
     local width=$1
     local sep=$2
+    local length=$3
     ############################
+    # First check: if width >= length ---> exit
+    if [ $width -ge $length ]; then
+        echo "Error: the width of the slider is greater than the length of the bar. Aborting."
+        handle_sigint
+    fi
     if [[ -z $start_pos ]]; then
         # First time it's called. Initalize values
         start_pos=0
@@ -30,8 +49,8 @@ bouncing_bar()
             # Move forwards only if the bar is within range
             start_pos=$(( $start_pos + 1 ))
             end_pos=$(( $start_pos + $width ))
-            if [ $end_pos -gt 100 ]; then
-                end_pos=99
+            if [ $end_pos -gt $length ]; then
+                end_pos=$(( $length - 1 ))
                 start_pos=$(( $end_pos - $width ))
                 # Switch direction
                 dir=1
@@ -50,7 +69,7 @@ bouncing_bar()
     fi
     echo -ne "\rProcessing ["
     # Main loop, paints the whole bar
-    for i in `seq 0 99`; do
+    for i in `seq 0 $(( $length - 1 ))`; do
         if [ $i -lt $start_pos ]; then 
             echo -ne "\e[0m "
         else
@@ -67,32 +86,41 @@ bouncing_bar()
 
 progress_bar()
 {
+    # We always want to represent a number from 0 to 100
+    # in case the bar's length is *not* 100. Calculate this
     local to=$1
+    local val=$(( $to * 100 / $len ))
     local max=$2
     local sep=$3
     local k=0
-    if [ $to -eq 100 ]; then
+    if [ $val -eq 100 ]; then
         spaces=""
-    elif [ $to -gt 9 ]; then
+    elif [ $val -gt 9 ]; then
         spaces=" "
     else
         spaces="  "
     fi
-    echo -ne "\rCompleted [$to%]$spaces["
+    echo -ne "\rCompleted [$val%]$spaces["
     for k in `seq 1 $to`; do
         echo -ne "\e[7m$sep"
     done
-    for k in `seq 1 $(( 100 - $i ))`; do
+    for k in `seq 1 $(( $len - $i ))`; do
         echo -ne "\e[0m\e[8m$sep"
     done
     # Print end
     echo -ne "\e[0m]"
 }
 
-# default: progress
-progress=1
+# Important to keep character echo-ing if aborted
+trap handle_sigint INT
 
-while getopts "bhps:" opt; do
+# default values
+progress=1
+len=100
+width=30
+sep='o'
+
+while getopts "bhl:ps:w:" opt; do
     case $opt in
         b)
             progress=0
@@ -100,21 +128,25 @@ while getopts "bhps:" opt; do
         h)
             usage && exit 0
             ;;
+        l)
+            len=$OPTARG
+            ;;
         p)
             progress=1
             ;;
         s)
             sep="$OPTARG"
             ;;
+        w)
+            width="$OPTARG"
+            ;;
+        *)
+            echo "Illegal option" >&2
+            usage
+            exit 1
+            ;;
     esac
 done
-
-# Custom separator
-if [[ -z $sep ]]; then
-    sep='o'
-else
-    sep=${sep:0:1}
-fi
 
 # Feed the progress externally
 # In a real scenario, N tasks would run
@@ -125,21 +157,20 @@ fi
 if [ $progress -eq 1 ]; then
     stty -echo
     i=0
-    while [ $i -lt 101 ]; do
+    while [ $i -lt $(( $len + 1 )) ]; do
         # echo "i is now $i"
-        progress_bar $i 100 $sep
+        progress_bar $i $len $sep
         # Random sleep time between 0 and 1 seconds
         sleep 0.$(( $RANDOM % 100 )) 
         i=$(( $i + $(( $RANDOM % 10 )) ))
     done
-    progress_bar 100 100 $sep
+    progress_bar $len $len $sep
     echo " Done."
     stty echo 2>&1
 else
-    width=30
     stty -echo
     for step in `seq 0 1 1000`; do
-        bouncing_bar $width $sep
+        bouncing_bar $width $sep $len
         sleep 0.1
     done
     echo " Done."
