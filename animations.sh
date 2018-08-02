@@ -11,6 +11,7 @@ ARGS:
              Defaults to 100 columns.
     -p       Show a progress bar.
     -s <sep> Specify the character to fill the spaces with.
+    -t       Show a filling water tank.
     -w       When using in the bouncing bar, sets the width of the slider.
              This option has no effect when using a progress bar.
              Defaults to 30.
@@ -23,6 +24,36 @@ handle_sigint()
     stty echo
     echo
     exit 2
+}
+
+fill_water_tank()
+{
+    local width=20
+    local height=20
+    local i=0
+    local j=0
+    local level=$1
+    local max=$2
+    local line=$(( $level * $height / 100 ))
+    for i in `seq $height -1 1`; do
+        for j in `seq $width -1 1`; do
+            if [ $j -eq 1 ] || [ $j -eq $width ]; then
+                echo -n "|"
+            else
+                if [ $j -gt 1 ] && [ $j -lt $width ] && [ $i -eq 1 ]; then
+                    echo -n "_"
+                else
+                    if [ $i -le $line ]; then
+                        echo -n "~"
+                    else
+                        echo -n " "
+                    fi
+                fi
+            fi
+        done
+        echo
+    done
+    tput cuu $height
 }
 
 bouncing_bar()
@@ -119,8 +150,9 @@ progress=1
 len=100
 width=30
 sep='o'
+tank=0
 
-while getopts "bhl:ps:w:" opt; do
+while getopts "bhl:ps:tw:" opt; do
     case $opt in
         b)
             progress=0
@@ -136,6 +168,9 @@ while getopts "bhl:ps:w:" opt; do
             ;;
         s)
             sep="$OPTARG"
+            ;;
+        t)
+            tank=1
             ;;
         w)
             width="$OPTARG"
@@ -168,6 +203,12 @@ if [ $progress -eq 1 ]; then
     echo " Done."
     stty echo 2>&1
 else
+    if [ $tank -eq 1 ]; then
+        for i in `seq 1 100`; do
+            fill_water_tank $i 100
+            sleep 0.2
+        done
+    fi
     stty -echo
     for step in `seq 0 1 1000`; do
         bouncing_bar $width $sep $len
