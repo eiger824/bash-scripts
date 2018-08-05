@@ -111,7 +111,7 @@ login_user()
     echo
     pass_sha256=$(sha256_pass $pass)
     echo "Logging in..."
-    ./progress-bar.sh
+    ./animations.sh -l40
     match=$(get_existing_user $user)
     user_field=$(echo $match | cut -d: -f1)
     pass_field=$(echo $match | cut -d: -f2)
