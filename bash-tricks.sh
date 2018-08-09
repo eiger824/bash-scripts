@@ -52,3 +52,11 @@ while [[ -n "${array[$pos]}" ]]; do
 done
 # 2nd way
 echo -e "\n${array[@]}"
+
+# READ-ONLY VARIABLES
+readonly foo=3
+echo "foo: $foo"
+# Attempt to modify: fail...
+foo=4
+echo "foo: $foo"
+
