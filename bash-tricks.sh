@@ -45,7 +45,10 @@ for letter in {a..z}; do
     array[((pos++))]=$letter
 done
 # Let's read the array!
+# 1st way
 pos=0
 while [[ -n "${array[$pos]}" ]]; do
     echo -n "${array[((pos++))]}"
 done
+# 2nd way
+echo -e "\n${array[@]}"
