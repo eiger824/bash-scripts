@@ -1,5 +1,14 @@
 #!/bin/bash
 
+get_remote_names()
+{
+    local repolist
+    for i in `seq 1 2`; do
+        repolist="$repolist $(wget -q 'https://github.com/eiger824?page='$i'&tab=repositories' -O - 2>&1 | sed -e '/^\s*$/d' -e 's/^\s\+//g' | \grep -E 'href=.*eiger824' | cut -d\" -f2 | \grep eiger824/ | cut -d/ -f3 )"
+    done
+    echo "$repolist"
+}
+
 usage()
 {
     echo "Usage: $(basename $0) -u <username> -r <repository> -p <protocol>"
@@ -23,11 +32,16 @@ while getopts "hu:p:r:" opt; do
             ;;
         r)
             repository=${OPTARG,,}
+            repolist=$(get_remote_names)
+            if [[ $repolist =~ $repository ]]; then
+                echo "Valid repository. Cloning now!"
+            else
+                echo "Invalid repo. Exiting now." >&2
+                exit 1
+            fi
             ;;
     esac
 done
-
-echo "Args are: $@"
 
 if [[ -z "$repository" ]]; then
     echo "Which repository?" >&2
