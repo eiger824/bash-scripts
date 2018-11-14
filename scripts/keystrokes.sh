@@ -39,7 +39,7 @@ while read -sn1 key; do
             if [ $x -eq 0 ]; then
                 x=$width
             else
-                x=$(( $x - 1 ))
+                ((x--))
             fi
             ;;
         l)
@@ -47,7 +47,7 @@ while read -sn1 key; do
             if [ $x -eq $width ]; then
                 x=0
             else
-                x=$(( $x + 1 ))
+                ((x++))
             fi
             ;;
         j)
@@ -55,7 +55,7 @@ while read -sn1 key; do
             if [ $y -eq $height ]; then
                 y=0
             else
-                y=$(( $y + 1 ))
+                ((y++))
             fi
             ;;
         k)
@@ -63,7 +63,8 @@ while read -sn1 key; do
             if [ $y -eq 0 ]; then
                 y=$height
             else
-                y=$(( $y - 1 ))
+                ((y--))
+#                 y=$(( $y - 1 ))
             fi
             ;;
         *)

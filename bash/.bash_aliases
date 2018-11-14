@@ -1,5 +1,5 @@
 # Reload bashrc
-alias bashf5='source /home/eiger824/.bashrc'
+alias bashf5='source ~/.bashrc'
 
 # Git aliases
 alias gl='git log'
@@ -26,9 +26,6 @@ alias l='ls -CF'
 # Use htop instead of top
 alias top='htop'
 
-# Popcorn-Time
-alias pct='/home/eiger824/Downloads/Popcorn-Time-0.3.10-Linux-64/Popcorn-Time &> /dev/null &'
-
 alias bye='xfce4-session-logout --logout'
 
 # Sort some outputs
@@ -37,12 +34,6 @@ alias env='env | sort'
 
 # Complete output when cat-ing
 alias ccat='cat -nA $1'
-
-# Image viewer: ristretto
-alias imgv='if [[ -z "$1" ]]; then ristretto .; else ristretto "$1"; fi;'
-
-# New firefox quantum!
-alias firefox='/home/eiger824/firefox/firefox'
 
 alias count='wc -l'
 
