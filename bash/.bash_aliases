@@ -8,6 +8,28 @@ alias gd='git diff'
 alias gb='git branch'
 alias gc='git checkout'
 
+# Push & pull
+gplo()
+{
+    local branch
+    branch="$1"
+    if [[ -z "${branch}" ]]; then
+        branch=$(git branch | \grep '^*' | tr -d '* ')
+    fi
+    echo "Pulling from branch \"${branch}\""
+    git pull --rebase origin ${branch}
+}
+gpso()
+{
+    local branch
+    branch="$1"
+    if [[ -z "${branch}" ]]; then
+        branch=$(git branch | \grep '^*' | tr -d '* ')
+    fi
+    echo "Pusing to branch \"${branch}\""
+    git push origin ${branch}
+}
+
 alias qq='exit'
 
 if [ -x /usr/bin/dircolors ]; then

@@ -83,18 +83,7 @@ then
 	. ~/.bash_aliases
 fi
 
-# Source GIT autocompletion script
-source /usr/share/git/completion/git-completion.bash
-
 # Source have and _have functions
 source /etc/bash_completion
-
-# Source ALL autocompletion scripts from bash
-for script in `ls /usr/share/bash-completion/completions/*`
-do
-    source $script
-done
-
-eval $(thefuck --alias)
 
 export PATH=$HOME/scripts:$PATH
