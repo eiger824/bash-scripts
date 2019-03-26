@@ -15,6 +15,9 @@ ERR_UNKNW=100
 err_hdlr()
 {
     case $1 in
+        0)
+            echo -n "Success" >&2
+            ;;
         1)
             echo -n "The first error" >&2
             ;;
@@ -58,13 +61,13 @@ some_other_fun()
 # Finally, when using the above function, always:
 # 1. execute the function
 # 2. parse the return code
-# 3. check if the parsed code is != 0, then call the err handler
+# 3. [optional] check if the parsed code is != 0, then call the err handler
 some_fun
-ret=$?
-if [ $ret -ne 0 ]; then
-    # Do stuff
-    err_hdlr $ret
-fi
+# Do stuff
+err_hdlr $?
+
+# Example with successful operation
+true && err_hdlr $?
 
 # Alternatively, have a helper function that checks that internally
 some_other_fun

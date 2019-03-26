@@ -30,6 +30,17 @@ gpso()
     git push origin ${branch}
 }
 
+gerrit_push()
+{
+    local branch
+    branch="$1"
+    if [[ -z "${branch}" ]]; then
+        branch=$(git branch | \grep '^*' | tr -d '* ')
+    fi
+    echo "Pushing to branch refs/for/${branch}"
+    git push origin HEAD:refs/for/${branch}
+}
+
 alias qq='exit'
 
 if [ -x /usr/bin/dircolors ]; then
@@ -48,8 +59,6 @@ alias l='ls -CF'
 # Use htop instead of top
 alias top='htop'
 
-alias bye='xfce4-session-logout --logout'
-
 # Sort some outputs
 alias lsmod='lsmod | sort'
 alias env='env | sort'
@@ -63,4 +72,9 @@ alias sl='sl -e'
 
 alias ec='echo Return code was: $?'
 
-complete -W "\`\grep -oE '^[a-zA-Z0-9_-]+:([^=]|$)' *file | sed 's/[^a-zA-Z0-9_-]*$//'\`" make
+alias mnssh='sshpass -p mininet ssh -X mininet@mininet'
+alias odlssh='sshpass -p opendaylight ssh -X odl@odl'
+
+alias tf='sshpass -p TungstenFabric ssh -X tungsten@10.0.2.15'
+
+alias ipa="ip address show | \grep --color=always -E '([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}|$' | GREP_COLORS='mt=01;34' \grep --color=always -P '(\s.+:\s)|$'"
