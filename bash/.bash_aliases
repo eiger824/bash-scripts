@@ -78,3 +78,4 @@ alias odlssh='sshpass -p opendaylight ssh -X odl@odl'
 alias tf='sshpass -p TungstenFabric ssh -X tungsten@10.0.2.15'
 
 alias ipa="ip address show | \grep --color=always -E '([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}|$' | GREP_COLORS='mt=01;34' \grep --color=always -P '(\s.+:\s)|$'"
+alias ipr="ip route show | \grep --color=always -E '([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}|$' | GREP_COLORS='mt=01;34' \grep --color=always -P '(\s.+:\s)|$'"
