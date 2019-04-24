@@ -53,7 +53,7 @@ case $protocol in
         git clone $protocol://git@$url/$username/$repository".git"
         ;;
     https)
-        git clone $protocol://$url/$username/$repo".git"
+        git clone $protocol://$url/$username/$repository".git"
         ;;
     *)
         echo "Unknown protocol '$protocol'" >&2
