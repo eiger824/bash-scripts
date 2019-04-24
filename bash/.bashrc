@@ -78,12 +78,14 @@ trap 'timer_start' DEBUG
 PROMPT_COMMAND='set_prompt'
 ######################################################################
 
+# General aliases
 if [[ -f ~/.bash_aliases ]]
 then
 	. ~/.bash_aliases
 fi
-
-# Source have and _have functions
-source /etc/bash_completion
+# Specific aliases, create this file with host-specific aliases
+if [[ -f ~/.bash_aliases_specific ]]; then
+    . ~/.bash_aliases_specific
+fi
 
 export PATH=$HOME/scripts:$PATH

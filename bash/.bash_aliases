@@ -72,8 +72,6 @@ alias sl='sl -e'
 
 alias ec='echo Return code was: $?'
 
-alias mnssh='sshpass -p mininet ssh -X mininet@mininet'
-alias odlssh='sshpass -p opendaylight ssh -X odl@odl'
-
 alias ipa="ip address show | \grep --color=always -E '([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}|$' | GREP_COLORS='mt=01;34' \grep --color=always -P '(\s.+:\s)|$'"
 alias ipr="ip route show | \grep --color=always -E '([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}|$' | GREP_COLORS='mt=01;34' \grep --color=always -P '(\s.+:\s)|$'"
+alias ipl="ip link show | \grep --color=always -E '([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}|$' | GREP_COLORS='mt=01;34' \grep --color=always -P '(\s.+:\s)|$'"
