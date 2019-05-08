@@ -72,6 +72,8 @@ alias sl='sl -e'
 
 alias ec='echo Return code was: $?'
 
-alias ipa="ip address show | \grep --color=always -E '([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}|$' | GREP_COLORS='mt=01;34' \grep --color=always -P '(\s.+:\s)|$'"
-alias ipr="ip route show | \grep --color=always -E '([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}|$' | GREP_COLORS='mt=01;34' \grep --color=always -P '(\s.+:\s)|$'"
-alias ipl="ip link show | \grep --color=always -E '([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}|$' | GREP_COLORS='mt=01;34' \grep --color=always -P '(\s.+:\s)|$'"
+# Not needed anymore, the alias below does that for us
+# alias ipa="ip address show | \grep --color=always -E '([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}|$' | GREP_COLORS='mt=01;34' \grep --color=always -P '(\s.+:\s)|$'"
+# alias ipr="ip route show | \grep --color=always -E '([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}|$' | GREP_COLORS='mt=01;34' \grep --color=always -P '(\s.+:\s)|$'"
+# alias ipl="ip link show | \grep --color=always -E '([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}|$' | GREP_COLORS='mt=01;34' \grep --color=always -P '(\s.+:\s)|$'"
+alias ip='ip -c'
