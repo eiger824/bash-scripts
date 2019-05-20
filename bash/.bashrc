@@ -65,13 +65,17 @@ set_prompt () {
     # If root, just print the host in red. Otherwise, print the current user
     # and host in green.
     if [[ $EUID == 0 ]]; then
-        PS1+="$Red\\u$Green@\\h "
+        PS1+="$Red\\u$Reset@\\h "
     else
-        PS1+="$Yellow\\u@$Green\\h "
+        PS1+="$Yellow\\u@$Green\\h$Reset "
     fi
     # Print the working directory and prompt marker in blue, and reset
     # the text color to the default.
-    PS1+="$Blue\\w $Reset\$ "
+    if [[ $EUID == 0 ]]; then
+        PS1+="$Blue\\w$Reset# "
+    else
+        PS1+="$Blue\\w$Reset\$ "
+    fi
 }
 
 trap 'timer_start' DEBUG
