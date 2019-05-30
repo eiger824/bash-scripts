@@ -45,24 +45,23 @@ for file in $(find scripts -type f); do
     fi
 done
 
-# Backup .bashrc and .bash_aliases, if existing
-if [[ -f $HOME/.bashrc ]] && [[ ! -h $HOME/.bashrc ]]; then
-    echo "Creating backup of $HOME/.bashrc"
-    mv $HOME/.bashrc $HOME/.bashrc.bkup
-fi
-if [[ -f $HOME/.bash_aliases ]] && [[ ! -h $HOME/.bash_aliases ]]; then
-    echo "Creating backup of $HOME/.bash_aliases"
-    mv $HOME/.bash_aliases $HOME/.bash_aliases.bkup
-fi
+
+# Backup existing files
+for rc in $HOME/.{bashrc,zshrc} $HOME/.{bash,zsh}_aliases; do
+    if [[ -f ${rc} ]] && [[ ! -h ${rc} ]]; then
+        echo "Creating backup of ${rc}"
+        mv ${rc} ${rc}.bkup
+    fi
+done
 
 # Create symlinks
-if [[ ! -h $HOME/.bashrc ]]; then
-    echo "Creating symlink for $HOME/.bashrc"
-    ln -s $(readlink -f bash/.bashrc) $HOME/.bashrc
-fi
-if [[ ! -h $HOME/.bash_aliases ]]; then
-    echo "Creating symlink for $HOME/.bash_aliases"
-    ln -s $(readlink -f bash/.bash_aliases) $HOME/.bash_aliases 
-fi
+for rc in $(find bash -type f) $(find zsh -type f); do
+    link_name="${HOME}/$(basename ${rc})"
+    if [[ ! -h ${link_name} ]]; then
+        echo "Creating symlink for ${rc}"
+        ln -s $(readlink -f ${rc}) ${link_name} 
+    fi
+done
+
 
 echo "Done!"
