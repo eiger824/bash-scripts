@@ -2,7 +2,7 @@
 export PATH=$HOME/bin:/usr/local/bin:$HOME/scripts:.:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/eiger824/.oh-my-zsh"
+export ZSH="/home/$USER/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -102,8 +102,11 @@ source $ZSH/oh-my-zsh.sh
 if [[ -f ~/.zsh_aliases ]]; then
     . ~/.zsh_aliases
 fi
-# Specific aliases, create this file with host-specific aliases
+# # Specific aliases, create this file with host-specific aliases
 if [[ -f ~/.zsh_aliases_specific ]]; then
     . ~/.zsh_aliases_specific
 fi
 
+# Grep color
+export GREP_COLORS='ms=01;31:mc=01;31:sl=:cx=:fn=33:ln=32:bn=32:se=36'
+export EDITOR=vim
