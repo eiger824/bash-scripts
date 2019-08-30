@@ -66,11 +66,16 @@ alias ccat='cat -nA $1'
 alias count='wc -l'
 
 alias ec='echo Return code was: $?'
+
+# Networking iproute2
 alias ip='ip -c'
 alias ipa='ip -c a'
 alias ipl='ip -c l'
 alias ipr='ip -c r'
 alias ipn='ip -c n'
+
+# Let's be Canadian!
+alias please='sudo'
 
 eval $(thefuck --alias)
 
@@ -85,3 +90,4 @@ edit-zshrc()
     vim ~/.zshrc
 }
 
+alias tm=tmux
