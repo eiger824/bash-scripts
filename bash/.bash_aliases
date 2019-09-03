@@ -80,3 +80,5 @@ alias ip='ip -c'
 alias ipa='ip a'
 alias ipl='ip l'
 alias ipr='ip r'
+
+alias tm='tmux'

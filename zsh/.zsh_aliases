@@ -80,14 +80,12 @@ alias please='sudo'
 eval $(thefuck --alias)
 
 # some functions
-reload-zshrc()
-{
+reload-zshrc() {
     unalias env && source ~/.zshrc
 }
 
-edit-zshrc()
-{
+edit-zshrc() {
     vim ~/.zshrc
 }
 
-alias tm=tmux
+alias tm='tmux'

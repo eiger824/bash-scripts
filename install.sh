@@ -47,7 +47,7 @@ done
 
 
 # Backup existing files
-for rc in $HOME/.{bashrc,zshrc} $HOME/.{bash,zsh}_aliases; do
+for rc in $HOME/.{bashrc,zshrc} $HOME/.{bash,zsh}_aliases $HOME/.tmux.conf; do
     if [[ -f ${rc} ]] && [[ ! -h ${rc} ]]; then
         echo "Creating backup of ${rc}"
         mv ${rc} ${rc}.bkup
@@ -55,13 +55,14 @@ for rc in $HOME/.{bashrc,zshrc} $HOME/.{bash,zsh}_aliases; do
 done
 
 # Create symlinks
-for rc in $(find bash -type f) $(find zsh -type f); do
-    link_name="${HOME}/$(basename ${rc})"
-    if [[ ! -h ${link_name} ]]; then
-        echo "Creating symlink for ${rc}"
-        ln -s $(readlink -f ${rc}) ${link_name} 
-    fi
+for dir in bash zsh tmux; do
+    for rc in $(find ${dir} -type f); do
+        link_name="${HOME}/$(basename ${rc})"
+        if [[ ! -h ${link_name} ]]; then
+            echo "Creating symlink for ${rc}"
+            ln -s $(readlink -f ${rc}) ${link_name}
+        fi
+    done
 done
-
 
 echo "Done!"

@@ -93,3 +93,5 @@ if [[ -f ~/.bash_aliases_specific ]]; then
 fi
 
 export PATH=$HOME/scripts:$PATH
+
+export EDITOR=vim
