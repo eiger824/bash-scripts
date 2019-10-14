@@ -5,6 +5,103 @@ alias gd='git diff'
 alias gb='git branch'
 alias gc='git checkout'
 
+underline()
+{
+    echo -e "\e[4m${@}\e[0m"
+}
+
+bold()
+{
+    echo -e "\e[1m${@}\e[0m"
+}
+
+blink()
+{
+    echo -e "\e[5m${@}\e[0m"
+}
+
+inverted()
+{
+    echo -e "\e[7m${@}\e[0m"
+}
+
+red()
+{
+    echo -ne "\e[91m"
+}
+green()
+{
+    echo -ne "\e[92m"
+}
+blue()
+{
+    echo -ne "\e[94m"
+}
+white()
+{
+    echo -ne "\e[97m"
+}
+light-gray()
+{
+    echo -ne "\e[37m"
+}
+dark-gray()
+{
+    echo -ne "\e[90m"
+}
+yellow()
+{
+    echo -ne "\e[93m"
+}
+cyan()
+{
+    echo -ne "\e[96m"
+}
+magenta()
+{
+    echo -ne "\e[95m"
+}
+reset()
+{
+    echo -ne "\e[39m"
+}
+
+prompt_yes_no()
+{
+    local ans
+    local val
+    while true; do
+        echo -n "${@} [Y/n]: "
+        read -q ans
+        ans=$(sed -e "s/\s//g" <<< ${ans})
+        case ${ans:l} in
+            "")
+                return 0
+                ;;
+            y)
+                echo && return 0
+                ;;
+            n)
+                echo && return 1
+                ;;
+            *)
+                echo -ne "\n"
+                ;;
+        esac
+    done
+    return ${val}
+}
+
+# git log - pretty
+glp()
+{
+    local n
+    n="$1"
+    [[ -z "${n}" ]] && n=10
+    [[ ! ${n} =~ [0-9]+ ]] && echo "USAGE: glp [0-9]+" && return 1
+    git log --pretty="format:$(red)%h$(reset) [$(green)%cD$(reset)] => %<(30)$(cyan)%cN$(reset) %<(30)$(yellow)%cE$(reset): %s " | head -${n}
+}
+
 # Push & pull
 gplo()
 {
@@ -23,19 +120,46 @@ gpso()
     if [[ -z "${branch}" ]]; then
         branch=$(git branch | \grep '^*' | tr -d '* ')
     fi
-    echo "Pusing to branch \"${branch}\""
+    echo "Pushing to branch \"${branch}\""
     git push origin ${branch}
 }
 
 gerrit_push()
 {
     local branch
+    local ret
     branch="$1"
     if [[ -z "${branch}" ]]; then
         branch=$(git branch | \grep '^*' | tr -d '* ')
+        prompt_yes_no "Does this remote branch look good? \"$(underline $(bold ${branch}))\""
+        ret=$?
+        echo -e "\n"
+        if [ ${ret} -ne 0 ]; then
+            echo "Aborted."
+            return 1
+        fi
     fi
-    echo "Pushing to branch refs/for/${branch}"
+    echo -e "Pushing to branch refs/for/${branch}"
     git push origin HEAD:refs/for/${branch}
+}
+
+gerrit_push_draft()
+{
+    local branch
+    local ret
+    branch="$1"
+    if [[ -z "${branch}" ]]; then
+        branch=$(git branch | \grep '^*' | tr -d '* ')
+        prompt_yes_no "Does this remote branch look good? \"$(underline $(bold ${branch}))\""
+        ret=$?
+        echo -e "\n"
+        if [ ${ret} -ne 0 ]; then
+            echo "Aborted."
+            return 1
+        fi
+    fi
+    echo -e "Pushing a draft to branch refs/for/${branch}"
+    git push origin HEAD:refs/for/${branch}%draft
 }
 
 alias qq='exit'
